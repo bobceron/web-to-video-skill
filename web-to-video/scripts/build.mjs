@@ -26,7 +26,11 @@ const probe = (f) => Number(execFileSync('ffprobe', ['-v', 'error', '-show_entri
 const rec = JSON.parse(readFileSync(join(media, 'record.json'), 'utf8'));
 const tokensPath = join(dir, 'capture', 'extracted', 'tokens.json');
 const tokens = existsSync(tokensPath) ? JSON.parse(readFileSync(tokensPath, 'utf8')) : {};
-const domain = new URL(rec.url).hostname.replace(/^www\./, '');
+const u = new URL(rec.url);
+const host = u.hostname.replace(/^www\./, '');
+const path = u.pathname.replace(/\/$/, '');
+const domain = path && path.length <= 36 ? host + path : host;
+const domSize = Math.min(96, Math.floor(1700 / (0.56 * domain.length)));
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 
 // Color de acento: el que pidas, o el más saturado de la página, o violeta
@@ -72,7 +76,7 @@ for (const f of ['vo.wav', 'scroll.mp4', ...rec.shots]) copyFileSync(join(media,
 if (broll) copyFileSync(join(vidDir, broll), join(out, 'assets', `broll${extname(broll)}`));
 
 const vals = {
-  LANG: opt('lang', 'es'), TITLE: esc(tokens.title || rec.title || domain), DOMAIN: esc(domain), ACCENT: accent,
+  LANG: opt('lang', 'es'), DOMSIZE: domSize, TITLE: esc(tokens.title || rec.title || domain), DOMAIN: esc(domain), ACCENT: accent,
   DUR: DUR, VODUR: r2(vo), BEATS: JSON.stringify(beats.map((b) => ({ s: r2(b.s), d: r2(b.d) }))),
   L1: words(lines[0], beats[0]), L2: words(lines[1], beats[1]), L3: words(lines[2], beats[2]), L4: words(lines[3], beats[3]),
   S1END: r2(beats[1].s), S2START: r2(beats[1].s), S2DUR: r2(beats[1].d), S3START: r2(beats[2].s), S3DUR: r2(beats[2].d),

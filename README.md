@@ -8,6 +8,15 @@ graba un recorrido, escribe el guion, genera la narración y renderiza un MP4. T
 > Esta es la **versión comunitaria**: hace una sola cosa y la hace bien. Más abajo está lo que incluye la
 > versión completa que uso en proyectos con clientes.
 
+## Ejemplo
+
+Este video lo hizo el skill **a partir de la página de este mismo repo**: scraping, recorrido, guion, voz y render
+en una sola corrida.
+
+[![Video generado por web-to-video desde este repo](examples/demo-poster.jpg)](examples/demo-web-to-video.mp4)
+
+▶ [Ver el MP4 (17 s, con voz)](examples/demo-web-to-video.mp4)
+
 ## Qué hace
 
 1. **Scraping** con `hyperframes capture`: texto visible, título, colores de la marca y los videos incrustados
