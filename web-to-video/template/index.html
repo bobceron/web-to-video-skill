@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="{{LANG}}" data-resolution="landscape">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=1920, height=1080" />
+<title>{{TITLE}}</title>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<style>
+@font-face { font-family: "Inter"; src: url("assets/fonts/Inter-400.woff2") format("woff2"); font-weight: 400; }
+@font-face { font-family: "Inter"; src: url("assets/fonts/Inter-700.woff2") format("woff2"); font-weight: 700; }
+:root { --bg: #07080c; --ink: #f3f4f8; --muted: #9098aa; --accent: {{ACCENT}}; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 1920px; height: 1080px; overflow: hidden; background: var(--bg); }
+#root { position: relative; width: 100%; height: 100%; overflow: hidden; font-family: "Inter", sans-serif; color: var(--ink); background: var(--bg); }
+.clip { position: absolute; inset: 0; }
+#bg .grid { position: absolute; inset: 0; background-image: linear-gradient(#ffffff08 1px, transparent 1px), linear-gradient(90deg, #ffffff08 1px, transparent 1px); background-size: 64px 64px; }
+#bg .glow { position: absolute; left: 900px; top: -200px; width: 1200px; height: 1000px; border-radius: 50%; background: radial-gradient(closest-side, var(--accent), transparent); opacity: .18; }
+#top .prog { position: absolute; left: 0; top: 0; height: 5px; width: 1920px; background: var(--accent); transform-origin: 0 50%; }
+#top .dom { position: absolute; left: 120px; top: 56px; height: 38px; padding: 0 16px; border-radius: 999px; border: 1px solid #ffffff22; background: #ffffff0d; display: flex; align-items: center; gap: 10px; font-size: 17px; font-weight: 700; letter-spacing: .04em; opacity: 0; }
+#top .dom i { width: 9px; height: 9px; border-radius: 50%; background: var(--accent); }
+
+.line { position: absolute; font-size: 64px; line-height: 1.08; font-weight: 700; letter-spacing: -0.035em; }
+.line .w { display: inline-block; opacity: 0; margin-right: 16px; }
+.line .w.k { color: var(--accent); }
+
+.frame { position: absolute; border-radius: 16px; overflow: hidden; background: #0c0d12; box-shadow: 0 0 0 1px #ffffff1f, 0 50px 120px #000c; opacity: 0; }
+.frame .bar { position: absolute; left: 0; right: 0; top: 0; height: 44px; background: #16181f; display: flex; align-items: center; gap: 8px; padding: 0 16px; z-index: 2; }
+.frame .bar i { width: 12px; height: 12px; border-radius: 50%; background: #3a3e4a; }
+.frame .bar span { margin-left: 18px; flex: 1; height: 26px; border-radius: 8px; background: #0c0d12; color: var(--muted); font-size: 14px; display: flex; align-items: center; padding: 0 12px; }
+.frame .view { position: absolute; left: 0; right: 0; top: 44px; bottom: 0; overflow: hidden; }
+.frame img, .frame video { width: 100%; height: 100%; object-fit: cover; object-position: top center; display: block; }
+
+#f1 { left: 960px; top: 250px; width: 840px; height: 516px; }
+#f2 { left: 300px; top: 250px; width: 1320px; height: 786px; }
+#c1 { left: 960px; top: 230px; width: 800px; height: 490px; }
+#c2 { left: 1040px; top: 360px; width: 800px; height: 490px; }
+
+#end .dom2 { position: absolute; left: 0; right: 0; top: 330px; text-align: center; font-size: 96px; font-weight: 700; letter-spacing: -0.04em; color: var(--accent); opacity: 0; }
+#end .line { left: 0; right: 0; top: 480px; text-align: center; }
+#end .by { position: absolute; left: 0; right: 0; top: 960px; text-align: center; font-size: 18px; color: #5f6678; letter-spacing: .08em; opacity: 0; }
+</style>
+</head>
+<body>
+<div id="root" data-composition-id="main" data-start="0" data-width="1920" data-height="1080" data-duration="{{DUR}}">
+  <audio id="vo" src="assets/vo.wav" data-start="0.5" data-duration="{{VODUR}}" data-track-index="9" data-volume="1"></audio>
+
+  <section id="bg" class="clip" data-start="0" data-duration="{{DUR}}" data-track-index="0"><div class="grid"></div><div class="glow"></div></section>
+  <section id="top" class="clip" data-start="0" data-duration="{{DUR}}" data-track-index="1"><div class="prog" id="prog"></div><div class="dom" id="dom"><i></i>{{DOMAIN}}</div></section>
+
+  <section id="s1" class="clip" data-start="0" data-duration="{{S1END}}" data-track-index="2"><div class="line" style="left:120px;top:330px;width:780px">{{L1}}</div></section>
+  <section id="s2" class="clip" data-start="{{S2START}}" data-duration="{{S2DUR}}" data-track-index="2"><div class="line" style="left:0;right:0;top:110px;text-align:center;font-size:54px">{{L2}}</div></section>
+  <section id="s3" class="clip" data-start="{{S3START}}" data-duration="{{S3DUR}}" data-track-index="2"><div class="line" style="left:120px;top:360px;width:760px">{{L3}}</div></section>
+  <section id="end" class="clip" data-start="{{S4START}}" data-duration="{{S4DUR}}" data-track-index="2">
+    <div class="dom2" id="dom2">{{DOMAIN}}</div>
+    <div class="line">{{L4}}</div>
+    <div class="by" id="by">Hecho con web-to-video · HyperFrames</div>
+  </section>
+
+  <!-- Contenedores sin data-start: el tiempo va en cada video -->
+  <div class="frame" id="f1"><div class="bar"><i></i><i></i><i></i><span>{{DOMAIN}}</span></div><div class="view"><img src="assets/{{SHOT1}}" alt=""></div></div>
+  <div class="frame" id="f2"><div class="bar"><i></i><i></i><i></i><span>{{DOMAIN}}</span></div><div class="view">{{S2_VIDEO}}</div></div>
+  <div class="frame" id="c2"><div class="bar"><i></i><i></i><i></i><span>{{DOMAIN}}</span></div><div class="view"><img src="assets/{{SHOT3}}" alt=""></div></div>
+  <div class="frame" id="c1"><div class="bar"><i></i><i></i><i></i><span>{{DOMAIN}}</span></div><div class="view">{{S3_MEDIA}}</div></div>
+</div>
+
+<script>
+const B = {{BEATS}};
+const DUR = {{DUR}};
+const tl = gsap.timeline({ paused: true });
+const E = "power3.out";
+
+/* texto cinético: cada palabra trae su tiempo en data-t */
+document.querySelectorAll(".line .w").forEach((w) => {
+  tl.fromTo(w, { opacity: 0, y: 30, rotationX: -60, transformPerspective: 600 }, { opacity: 1, y: 0, rotationX: 0, duration: 0.35, ease: "back.out(1.6)" }, parseFloat(w.dataset.t));
+});
+tl.fromTo("#prog", { scaleX: 0 }, { scaleX: 1, duration: DUR, ease: "none" }, 0);
+tl.fromTo("#dom", { opacity: 0, x: -20 }, { opacity: 1, x: 0, duration: 0.4 }, 0.2);
+tl.to("#dom", { opacity: 0, duration: 0.3 }, B[3].s);
+
+/* escena 1: la página en un navegador 3D */
+tl.fromTo("#f1", { opacity: 0, rotationY: -48, rotationX: 8, x: 160, transformPerspective: 2000 }, { opacity: 1, rotationY: -16, rotationX: 4, x: 0, duration: 1.1, ease: E }, 0.3);
+tl.to("#f1", { rotationY: -8, duration: Math.max(0.3, B[1].s - 1.9), ease: "none" }, 1.45);
+tl.to("#f1", { opacity: 0, x: -200, rotationY: 20, duration: 0.4, ease: "power2.in" }, B[1].s - 0.35);
+
+/* escena 2: el recorrido grabado */
+tl.fromTo("#f2", { opacity: 0, rotationX: 28, y: 140, scale: 0.92, transformPerspective: 2200 }, { opacity: 1, rotationX: 0, y: 0, scale: 1, duration: 0.8, ease: E }, B[1].s);
+tl.to("#f2", { opacity: 0, y: -60, scale: 0.96, duration: 0.35, ease: "power2.in" }, B[2].s - 0.3);
+
+/* escena 3: tarjetas en capas */
+tl.fromTo("#c2", { opacity: 0, rotationY: -40, z: -300, x: 220, transformPerspective: 2000 }, { opacity: 0.85, rotationY: -18, z: -140, x: 0, duration: 0.8, ease: E }, B[2].s);
+tl.fromTo("#c1", { opacity: 0, rotationY: -40, z: 200, x: 260, transformPerspective: 2000 }, { opacity: 1, rotationY: -14, z: 0, x: 0, duration: 0.8, ease: E }, B[2].s + 0.15);
+tl.to(["#c1", "#c2"], { opacity: 0, x: 120, duration: 0.35, ease: "power2.in" }, B[3].s - 0.3);
+
+/* cierre */
+tl.fromTo("#dom2", { opacity: 0, scale: 0.9, y: 30 }, { opacity: 1, scale: 1, y: 0, duration: 0.6, ease: E }, B[3].s);
+tl.fromTo("#by", { opacity: 0 }, { opacity: 1, duration: 0.5 }, Math.min(DUR - 1.2, B[3].s + 1.2));
+
+window.__timelines = window.__timelines || {};
+window.__timelines["main"] = tl;
+</script>
+</body>
+</html>

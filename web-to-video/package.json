@@ -1,0 +1,11 @@
+{
+  "name": "web-to-video-skill",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Skill de Claude Code: de una página web a un video con voz, usando HyperFrames.",
+  "license": "MIT",
+  "dependencies": {
+    "puppeteer-core": "23.11.1"
+  }
+}
